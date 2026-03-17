@@ -25,13 +25,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Decode Keystore
-      run: |
-        $keystoreBytes = [Convert]::FromBase64String("${{ secrets.ANDROID_KEYSTORE_BASE64 }}")
-        [IO.File]::WriteAllBytes("src/TiktokStreakSaver/streaksaver.keystore", $keystoreBytes)
-        Write-Host "Keystore file created successfully"
-      shell: pwsh
-
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -51,7 +44,7 @@ jobs:
 
     - name: Build Android Release
       run: |
-        dotnet build ${{ env.PROJECT_PATH }} -f net9.0-android -c Debug -o ./artifacts
+        dotnet publish ${{ env.PROJECT_PATH }} -f net9.0-android -c Debug -o ./artifacts
       env:
         ANDROID_SIGNING_PASSWORD: ${{ secrets.ANDROID_SIGNING_PASSWORD }}
 
